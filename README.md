@@ -1,2 +1,2 @@
 # samueleblanc.github.io
-Person
+Personal website.
