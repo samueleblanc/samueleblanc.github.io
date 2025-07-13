@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Home</title>
+        <link rel="icon" href="images/poincaredisk.svg">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Visualise isometries of the upper half-plane.">
+        <meta name="keywords" content="mathematic, geometry, visualisation, mobius, linear, group, hyperbolic">
+        <link rel="stylesheet" href="home.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: "\\begin{align}", right: "\\end{align}", display: true},
+                    {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+                ],
+                throwOnError : false
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <header><a href="index_fr.html"><input type="button" value="Français"></a></header>
+        <h1>Poincaré half-plane model</h1>
+        
+        <p>
+            This website lets you visualize the action of \(\mathrm{PSL}(2,\mathbb{R})\) on \(\mathbb{H}_{\mathrm{sup}} \coloneqq \{x+iy \in \mathbb{C} : y>0\}\), the upper half-plane or Poincaré half-plane model. 
+            The action is a Möbius transformation, meaning that the action is defined by
+            \[\begin{pmatrix}a&b\\c&d\end{pmatrix}\cdot z = \frac{az+b}{cz+d},\]
+            where \(z \in \mathbb{H}_{\mathrm{sup}}\) and \(a,b,c,d \in \mathbb{R}\) are such that \(ad-bc=1\). 
+        </p>
+
+        <p>
+            The functioning of the program is based on the following theorem:
+        </p>
+
+        <p>
+            <b>Classification of isometries.</b> \(\mathrm{PSL}(2,\mathbb{R})\) is the group of orientation-preserving isometries of \(\mathbb{H}_{\mathrm{sup}}\).<br>
+            Furthermore, a transformation satisfies exactly one of these cases:
+            <ol>
+                <li>The transformation is the identity transformation,</li>
+                <li>There are two fixed points in \(\mathbb{R}\cup\{\infty\}\),</li>
+                <li>There is one fixed point in \(\mathbb{R}\cup\{\infty\}\),</li>
+                <li>There is one fixed point in \(\mathbb{H}_{\mathrm{sup}}\).</li>
+            </ol>
+        </p>
+
+        <p>
+            The program uses the fact that, given one of these situations, there exists a unique transformation that maps \(z_{1} \in \mathbb{H}_{\mathrm{sup}}\) to \(z_{2} \in \mathbb{H}_{\mathrm{sup}}\) 
+            or \(x_{1} \in \mathbb{R}\cup\{\infty\}\) to \(x_{2} \in \mathbb{R}\cup\{\infty\}\), depending of the case. 
+            The grey points represent the fixed points. By dragging your mouse, you specify \(z_{1} \mapsto z_{2}\) or \(x_{1} \mapsto x_{2}\). 
+            The program differentiates these cases for you. Then, it finds the unique transformation and applies it to the hyperbolic lines!
+        </p>
+
+        <div class="picture_box">
+            <a href="visualisation/hsup.html"><img src="images/psl2rAction.png"></a>
+        </div>
+
+        <p>
+            This website is greatly inspired by <a href="https://github.com/samueleblanc/riemannsphere" target="_blank">the one</a> made to visualize the action of \(\mathrm{PSP}(4,\mathbb{R})\) on the Riemann sphere. 
+            The code relating to this website is on <a href="https://github.com/samueleblanc/upperhalfplane" target="_blank">GitHub</a>. The visualizations 
+            were made using <a href="https://cindyjs.org/" target="_blank">CindyJS</a>. 
+        </p>
+    </body>
+</html>

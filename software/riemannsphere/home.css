@@ -1,0 +1,34 @@
+body {
+    margin: 0.5em 3em;
+}
+header {
+    text-align: right;
+}
+h1 {
+    text-align: center;
+    color: black;
+}
+h1 a {
+    text-decoration: none;
+    color: black;
+}
+p {
+    margin: 2% 10%;
+}
+input[type=button] {
+    border: none;
+    border-radius: 7px;
+    background-color: whitesmoke;
+    padding: 12px;
+}
+input[type=button]:hover {
+    background-color: lightgray;
+}
+/* For Möb+ and Sp(4,R) */
+#main_links {
+    text-align: center;
+    font-size: x-large;
+}
+#sep {
+    padding: 1.5em;
+}

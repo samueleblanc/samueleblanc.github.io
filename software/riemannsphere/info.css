@@ -1,0 +1,45 @@
+body {
+    margin: 0.5em 3em;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+}
+h1 {
+    text-align: center;
+    color: black;
+}
+h1 a {
+    text-decoration: none;
+    color: black;
+}
+p, ol {
+    margin: 2% 10%;
+}
+p {
+    text-align: justify;
+}
+input[type=button] {
+    border: none;
+    border-radius: 7px;
+    background-color: whitesmoke;
+    padding: 12px;
+}
+input[type=button]:hover {
+    background-color: lightgray;
+}
+/* Picture as link to other page */
+.picture_box {
+    display: block;
+    margin: auto;
+    text-align: center;
+}
+.picture_box img {
+    width: 40%;
+    height: auto;
+    display: inline-block;
+    opacity: 75%;
+}
+.picture_box img:hover {
+    opacity: 100%;
+}

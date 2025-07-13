@@ -1,0 +1,71 @@
+body {
+    margin: 0.5em 3em;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+}
+h1 {
+    text-align: center;
+    color: black;
+}
+h1 a {
+    text-decoration: none;
+    color: black;
+}
+#canvasContainer {
+    position: absolute;
+    right: 22%;
+    width: 56%;
+    height: auto;
+}
+#CSCanvas{
+    margin: auto;
+}
+/* Imaginary and real line */
+#imzText {
+    text-align: center;
+}
+#rezText {
+    position: absolute;
+    top: 50%;
+    left: 6%;
+}
+.settingBlock {
+    position: absolute;
+    right: 3%;
+    width: 16%;
+    padding: 1em;
+    z-index: 1;
+}
+.settingBlock input[type=number] {
+    width: 70%;
+}
+.paramsBox {
+    padding-top: 15px;
+    text-align: center;
+}
+.paramsBox input[type=range]{
+    width: 80%;
+}
+.paramsBox input[type=number]{
+    width: 65%;
+}
+input[type=button],
+input[type=reset] {
+    border: none;
+    border-radius: 7px;
+    background-color: whitesmoke;
+    padding: 12px;
+}
+input[type=number] {
+    border: none;
+    border-radius: 5px;
+    background-color: whitesmoke;
+    padding: 7px;
+}
+input[type=button]:hover,
+input[type=reset]:hover,
+input[type=number]:hover {
+    background-color: lightgray;
+}

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Transformation de Möbius</title>
+        <link rel="icon" href="../images/riemann_sphere">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="mathematiques, geometrie, visualisation, mobius, symplectique, groupe, veronese, lagrangien">
+        <link rel="stylesheet" href="./visualisation.css">
+        
+        <script type="text/javascript" src="https://cindyjs.org/dist/v0.8/Cindy.js"></script>
+        <script type="text/javascript" src="https://cindyjs.org/dist/v0.8/CindyGL.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script>
+    </head>
+    <body>
+        <header><a href="../index-fr.html"><input type="button" value="Accueil"></a> <a href="orientedpoints.html"><input type="button" value="English"></a></header>
+        <h1><a href="../mobius-fr.html">Transformation de Möbius</a></h1>
+
+        <div class="settingBlock">
+            <a href="./domaincoloring-fr.html"><input type="button" value="Domain coloring"></a>
+            <a href="./points-fr.html"><input type="button" value="Points discrets"></a>
+            <form id="dom_color_form" autocomplete="off">
+                <h4>\(\mathfrak{R}(z)\)</h4>
+                <label for="x_min">Min:</label>
+                <input type="number" name="x_min" id="x_min" value="-5"><br>
+                <label for="x_max">Max:</label>
+                <input type="number" name="x_max" id="x_max" value="5"><br><br>
+                <h4>\(\mathfrak{I}(z)\)</h4>
+                <label for="y_min">Min:</label>
+                <input type="number" name="y_min" id="y_min" value="-5"><br>
+                <label for="y_max">Max:</label>
+                <input type="number" name="y_max" id="y_max" value="5"><br><br>
+                <label for="btninfty">Envoie un point à \(\infty\)</label><input type="checkbox" name="btninfty" id="btninfty" unchecked><br><br>
+                <input type="button" value="Afficher" id="show">
+                <input type="button" value="Annuler" id="reset">
+            </form>
+        </div>
+
+        <div id="canvasContainer">
+            <p id="imzText">\(\mathfrak{I}(z)\)</p>
+            <p id="rezText">\(\mathfrak{R}(z)\)</p>
+            <canvas id="CSCanvas" width="650" height="650"></canvas>
+        </div>
+        <br><br><br><br>
+
+        <script id="csinit" type="text/x-cindyscript">
+            storedM = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]];  // Matrix of the (total) transformation
+            transfoM = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]];  // Matrix of the (current) transformation
+            
+            applyMob = false;  // True if currently applying a transformation
+            draggingZ1 = false;  // True if currently dragging a point
+            draggingZ2 = false;
+
+            dstToPoint = 0.15;  // Default value of the distance (mouse to point) at which it should be dragged
+            // Is also the radius of each oriented point
+
+            // Default values of the domain
+            reRange = -5..5;
+            imRange = -5..5;
+            
+            updateMatrix(start,current) := (
+                // Returns the new 'transfoM'
+
+                regional(fixed1, fixed2, A, B, BinvA, mobMatrix);
+
+                fixed1 = if (Z1.homog_3 == 0, [complex([1,0]),0], [complex(Z1), 1]);
+                fixed2 = [complex(Z2), 1];
+
+                A = [[fixed1_2*det([start,fixed2]), -fixed1_1*det([start,fixed2])], 
+                    [fixed2_2*det([start,fixed1]), -fixed2_1*det([start,fixed1])]];
+
+                B = [[fixed1_2*det([current,fixed2]), -fixed1_1*det([current,fixed2])], 
+                    [fixed2_2*det([current,fixed1]), -fixed2_1*det([current,fixed1])]];
+
+                BinvA = mult(inverse(B),A);
+                BinvA = 1/sqrt(det(BinvA))*BinvA;
+
+                [[re(BinvA_1_1), -im(BinvA_1_1), re(BinvA_1_2), -im(BinvA_1_2)],
+                 [im(BinvA_1_1), re(BinvA_1_1), im(BinvA_1_2), re(BinvA_1_2)],
+                 [re(BinvA_2_1), -im(BinvA_2_1), re(BinvA_2_2), -im(BinvA_2_2)],
+                 [im(BinvA_2_1), re(BinvA_2_1), im(BinvA_2_2), re(BinvA_2_2)]];
+            );
+
+            updateDstToPoint(rangeMax) := (
+                // Called by JavaScript to make sure the 'effective range' (for mouse drag)
+                // of the points are adequate (based on the domain)
+
+                dstToPoint = 0.015 * rangeMax;
+            );
+
+            updateRanges(re, im) := (
+                // Called by JavaScript
+                reRange = re;
+                imRange = im;
+            );
+        </script>
+
+        <script id="csmousedrag" type="text/x-cindyscript">
+            // Move points
+            if ((|mouse()-Z1| < dstToPoint) 
+                 & !applyMob & !draggingZ2,
+                draggingZ1 = true;
+            );
+            if ((|mouse()-Z2| < dstToPoint) 
+                 & !applyMob & !draggingZ1,
+                draggingZ2 = true;
+            );
+            if (draggingZ1,
+                moveto(Z1,mouse());
+            );
+            if (draggingZ2,
+                moveto(Z2,mouse());
+            );
+
+            // Update transfoM and the starting point
+            if (applyMob,
+                if (!draggingZ1 & !draggingZ2,
+                    transfoM = updateMatrix(start,[complex(mouse()),1]);
+                    ,
+                    applyMob = false;
+                );
+                ,
+                if (!draggingZ1 & !draggingZ2,
+                    start = [complex(mouse()),1];
+                    applyMob = true;
+                );
+            );
+        </script>
+
+        <script id="csmouseup" type="text/x-cindyscript">
+            // Update storedM and assign other variables to their default value
+
+            storedM = mult(transfoM, storedM);
+            transfoM = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]];
+            applyMob = false;
+            draggingZ1 = false;
+            draggingZ2 = false;
+        </script>
+
+        <script id="csdraw" type="text/x-cindyscript">
+            // Apply möbius transformation on each oriented point
+
+            mobius = mult(transfoM, storedM);
+            forall(reRange,x,
+                forall(imRange,y,
+                    z = [x,y,1,0];
+                    fz = mult(mobius, transpose([z]));
+                    fz = [complex(flatten([fz_1, fz_2])), complex(flatten([fz_3, fz_4]))];
+                    ang = arctan2(i*(conjugate(fz_2)/fz_2));  // arctan2(z) returns the argument of z
+                    realCoord = gauss(fz_1 / fz_2);
+                    col = if([x,y] != [0,0], hue(arctan2([x,y])/(2*pi)), [0,0,0]);
+                    fillcircle(realCoord, dstToPoint/1.5, color->col);
+                    drawtext(realCoord, "⟶", angle->ang, size->16, color->col);
+                );
+            );
+        </script>
+
+        <script type="text/javascript">
+            function float(array) {
+                return array.map(i => parseFloat(i));
+            }
+        </script>
+
+        <script type="text/javascript">
+            // Adjust canvas width
+            const canvasContainer = document.getElementById("canvasContainer");
+            const canvas = document.getElementById("CSCanvas");
+            let size = Math.min(canvasContainer.clientWidth - 115, window.innerHeight * 0.8);
+            canvas.width = size;
+            canvas.height = size;
+        </script>
+        
+        <script type="text/javascript">
+            const showBtn = document.getElementById("show");
+            const resetBtn = document.getElementById("reset");
+            const inftyBtn = document.getElementById("btninfty");
+
+            // Domain
+            const reMin = document.getElementById("x_min");
+            const reMax = document.getElementById("x_max");
+            const imMin = document.getElementById("y_min");
+            const imMax = document.getElementById("y_max");
+
+            let reMinV, imMaxV, reMaxV, imMinV;
+            [reMinV, imMaxV, reMaxV, imMinV] = float([reMin.value, imMax.value, reMax.value, imMin.value]);
+
+            // Homogeneous coordinates
+            let z1Pos = [((reMaxV+reMinV)/2) + (reMinV/2), (imMaxV+imMinV)/2, 1];
+            let z2Pos = [((reMaxV+reMinV)/2) + (reMaxV/2), (imMaxV+imMinV)/2, 1];
+
+            let lastZ1Pos = z1Pos;  // Keeps track of Z1's position when clicking the btn to send Z1 to infinity or to bring it back
+
+            let cdy = CindyJS({
+                    canvasname: "CSCanvas",
+                    scripts: "cs*",
+                    animation: {autoplay: false},
+                    geometry : [
+                        {name: "Z1", kind: "P", type: "Free", pos: z1Pos, color: [1,1,1], size: 5, pinned: true},
+                        {name: "Z2", kind: "P", type: "Free", pos: z2Pos, color: [1,1,1], size: 5, pinned: true},
+                        {name: "re_axis", type: "FreeLine", pos: [0,1,0], color: [0,0,0], pinned: true},
+                        {name: "im_axis", type: "FreeLine", pos: [1,0,0], color: [0,0,0], pinned: true}
+                    ],
+                    grid: 1,
+                    ports: [{
+                        id: "CSCanvas",
+                        transform: [{visibleRect: [reMinV, imMaxV, reMaxV, imMinV]}]
+                    }],
+                    use: ["CindyGL"]
+                });
+
+            // [1,0,0] (i.e. [1+0i,0]) is the point at infinity in homogeneous coordinates
+            if (inftyBtn.checked) {z1Pos = [1,0,0]}
+            
+            showBtn.addEventListener("click", () => {
+                // Call CindyJS again but with the (potentially) new parameters
+                [reMinV, imMaxV, reMaxV, imMinV] = float([reMin.value, imMax.value, reMax.value, imMin.value]);
+                z1Pos = (inftyBtn.checked) ? [1,1,0] : [((reMaxV+reMinV)/2) + (reMinV/2), (imMaxV+imMinV)/2, 1];
+                z2Pos = [((reMaxV+reMinV)/2) + (reMaxV/2), (imMaxV+imMinV)/2, 1];
+                makeCanvas();
+                updateDstToPoint();
+                updateRanges();
+                verifyDomain();
+            });
+
+            resetBtn.addEventListener("click", () => {
+                // Reset everything to their default value
+                inftyBtn.checked = false;
+                reMin.value = -5;
+                imMax.value = 5;
+                reMax.value = 5;
+                imMin.value = -5;
+                [reMinV, imMaxV, reMaxV, imMinV] = float([reMin.value, imMax.value, reMax.value, imMin.value]);
+                z1Pos = [((reMaxV+reMinV)/2) + (reMinV/2), (imMaxV+imMinV)/2, 1];
+                z2Pos = [((reMaxV+reMinV)/2) + (reMaxV/2), (imMaxV+imMinV)/2, 1];
+                makeCanvas();
+                updateDstToPoint();
+                updateRanges();
+                verifyDomain();
+            });
+
+            inftyBtn.addEventListener("click", () => {
+                // Send Z1 to infinity or bring it back
+                if (inftyBtn.checked) {
+                    lastZ1Pos = getZ1();
+                    z1Pos = [1,0,0];
+                    updateZ1(z1Pos);
+                } else {
+                    z1Pos = lastZ1Pos;
+                    updateZ1(z1Pos);
+                };
+            });
+
+            function makeCanvas() {
+                cdy = CindyJS({
+                    canvasname: "CSCanvas",
+                    scripts: "cs*",
+                    animation: {autoplay: false},
+                    geometry : [
+                        {name: "Z1", kind: "P", type: "Free", pos: z1Pos, color: [1,1,1], size: 5, pinned: true},
+                        {name: "Z2", kind: "P", type: "Free", pos: z2Pos, color: [1,1,1], size: 5, pinned: true},
+                        {name: "re_axis", type: "FreeLine", pos: [0,1,0], color: [0,0,0], pinned: true},
+                        {name: "im_axis", type: "FreeLine", pos: [1,0,0], color: [0,0,0], pinned: true}
+                    ],
+                    grid: 1,
+                    ports: [{
+                        id: "CSCanvas",
+                        transform: [{visibleRect: [reMinV, imMaxV, reMaxV, imMinV]}]
+                    }],
+                    use: ["CindyGL"]
+                });
+            };
+
+            function updateZ1(Z1) {
+                // Changes the position of Z1
+                cdy.evokeCS('moveto(Z1,['+Z1.join(",")+']);');
+            };
+
+            function getZ1() {
+                // Returns the position of Z1
+                return cdy.saveState().geometry[0].pos;
+            };
+
+            function updateDstToPoint() {
+                // Updates the value of 'dstToPoint' (variable in the CindyJS code)
+                cdy.evokeCS('updateDstToPoint('+Math.max((reMaxV-reMinV), (imMaxV-imMinV))+');');
+            };
+
+            function updateRanges() {
+                // Updates the domain in CindyJS
+                cdy.evokeCS('updateRanges('+reMinV+'..'+reMaxV+','+imMinV+'..'+imMaxV+');');
+            };
+
+            function verifyDomain() {
+                if (reMaxV < reMinV) {
+                    alert("Erreur: ℜₘₐₓ(𝑧) < ℜₘᵢₙ(𝑧)");
+                } else if (imMaxV < imMinV) {
+                    alert("Erreur: ℑₘₐₓ(𝑧) < ℑₘᵢₙ(𝑧)");
+                };
+                if ((reMaxV-reMinV)*(imMaxV-imMinV) > 3600) {
+                    alert("Considérez 'Domain coloring' pour une meilleure performance.");
+                };
+            };
+
+            updateDstToPoint();
+            updateRanges();
+            verifyDomain();
+
+        </script>
+
+    </body>
+</html>

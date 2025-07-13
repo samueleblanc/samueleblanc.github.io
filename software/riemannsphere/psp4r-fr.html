@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>PSp(4,R)</title>
+        <link rel="icon" href="images/riemann_sphere">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="mathematiques, geometrie, visualisation, mobius, symplectique, groupe, veronese, lagrangien">
+        <link rel="stylesheet" href="info.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: "\\begin{align}", right: "\\end{align}", display: true},
+                    {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+                ],
+                throwOnError : false
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <header><a href="index-fr.html"><input type="button" value="Accueil"></a> <a href="psp4r.html"><input type="button" value="English"></a></header>
+        <h1>\(\mathrm{PSp}(4, \mathbb{R})\)</h1>
+        
+        <p>
+            Soient \(V\) un espace vectoriel et \(K\) un corps. Une <i>forme symplectique</i> sur \(V\) est une application bilinéaire 
+            \(\omega : V\times V \to K\) telle que \(\omega\) est 
+        </p>
+        <ol>
+            <li>Alternée : \(\omega(u,u) = 0\) pour tout \(u \in V\);</li>
+            <li>Non dégénérée : \(\omega(u,v) = 0\) pour tout \(v \in V\) implique que \(u=0\).</li>
+        </ol>
+        <p>
+            Un <i>espace vectoriel symplectique</i> est un espace vectoriel muni d'une forme symplectique. De plus, en fixant une base, 
+            il est possible de représenter la forme symplectique \(\omega\) par une matrice \(\Omega\). 
+        </p>
+
+        <p>
+            Le <i>groupe symplectique</i>, noté \(\mathrm{Sp}(2n, K)\), est le groupe des transformations linéaires d'un \(K\)-espace vectoriel symplectique 
+            de dimension \(2n\) préservant la forme symplectique. Dans notre cas, nous nous intéressons au groupe 
+            \[\mathrm{Sp}(4, \mathbb{R}) = \{M \in M_{4}(\mathbb{R}) \mid M^{T}\Omega M = \Omega\}\] 
+            et plus particulièrement, au <i>groupe projectif symplectique</i>
+            \[\mathrm{PSp}(4,\mathbb{R}) = \mathrm{Sp}(4,\mathbb{R})/\{-I,I\}.\]
+            C'est un groupe de \(10\) dimensions. 
+        </p>
+
+        <p>
+            Considérons le groupe des transformations de Möbius \(\mathcal{Möb}\) en tant que sous-groupe de \(\mathrm{PGL}(4,\mathbb{R})\). Ce groupe 
+            est un sous-groupe de \(\mathrm{PSp}(4, \mathbb{R})\) de \(6\) dimensions. En paramétrant les \(4\) autres dimensions par des <i>sliders</i>, nous obtenons 
+            l'entièreté de \(\mathrm{PSp}(4, \mathbb{R})\). Les transformations de Möbius sont sélectionnées de la même façon que décrite dans leur <a href="mobius-fr.html">section dédiée</a>. 
+        </p>
+
+        <p>
+            À gauche, nous visualisons l'action de \(\mathrm{PSp}(4, \mathbb{R})\) sur des drapeaux isotropes (visualisés en tant que cercles orientés avec point) et à droite, sur la courbe de Veronese. 
+        </p>
+
+        <div class="picture_box">
+            <a href="visualisation/drapeauxisotropes.html"><img src="images/picture_flags.png"></a>
+            <a href="visualisation/veronese-fr.html"><img src="images/picture_veronese.png"></a>
+        </div>
+    </body>
+</html>

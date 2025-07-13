@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Transformation de Möbius</title>
+        <link rel="icon" href="images/riemann_sphere">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="mathematiques, geometrie, visualisation, mobius, symplectique, groupe, veronese, lagrangien">
+        <link rel="stylesheet" href="info.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: "\\begin{align}", right: "\\end{align}", display: true},
+                    {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+                ],
+                throwOnError : false
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <header><a href="index-fr.html"><input type="button" value="Accueil"></a> <a href="mobius.html"><input type="button" value="English"></a></header>
+        <h1>Transformation de Möbius</h1>
+        
+        <p>
+            Une transformation de Möbius \(M\) est une fonction \(M: \hat{\mathbb{C}}\rightarrow\hat{\mathbb{C}}\), où 
+            \(\hat{\mathbb{C}} = \mathbb{C}\cup\{\infty\}\) et est appelée la <i>sphère de Riemann</i>.<br>
+            Plus précisément, une transformation de Möbius est une fonction définie par
+            \begin{align*}
+                M : \hat{\mathbb{C}} &\rightarrow \hat{\mathbb{C}}\\
+                z &\mapsto \frac{az+b}{cz+d}
+            \end{align*}
+            avec \(a,b,c,d \in \mathbb{C}\) et \(ad-bc \neq 0\).
+        </p>
+
+        <p>
+            Le programme utilise le fait qu'il existe une unique \(M\) telle que, pour \(\{z_{1},z_{2},z_{3}\}\) et \(\{w_{1},w_{2},w_{3}\}\) 
+            deux ensembles d'éléments distincts dans \(\hat{\mathbb{C}}\), nous avons que \(M(z_{i}) = w_{i}\) pour \(i=1,2,3\).<br>
+            Les deux points gris représentent \(z_{1} = w_{1}\) et \(z_{2} = w_{2}\) et en glissant la souris, 
+            vous spécifiez \(z_{3} \mapsto w_{3}\). Le programme trouve alors la fonction \(M\) correspondante et applique la transformation sur la sphère de Riemann!
+        </p>
+
+        <p>
+            À gauche, la visualisation utilise du <i>domain coloring</i> et à droite, elle utilise des points discrets \(a+b\mathrm{i}\) 
+            avec \(a,b \in \mathbb{Z}\).
+        </p>
+
+        <div class="picture_box">
+            <a href="visualisation/domaincoloring-fr.html"><img src="images/picture_dom_col.png"></a>
+            <a href="visualisation/points-fr.html"><img src="images/picture_points.png"></a>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>PSp(4,R)</title>
+        <link rel="icon" href="images/riemann_sphere">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="mathematics, geometry, visualisation, mobius, symplectic, group, veronese, lagrangian">
+        <link rel="stylesheet" href="info.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: "\\begin{align}", right: "\\end{align}", display: true},
+                    {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+                ],
+                throwOnError : false
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <header><a href="index.html"><input type="button" value="Home"></a> <a href="psp4r-fr.html"><input type="button" value="Français"></a></header>
+        <h1>\(\mathrm{PSp}(4, \mathbb{R})\)</h1>
+        
+        <p>
+            Let \(V\) be a vector space and let \(K\) be a field. A <i>symplectic bilinear form</i> on \(V\) is a bilinear map 
+            \(\omega : V\times V \to K\) such that \(\omega\) is 
+        </p>
+        <ol>
+            <li>Alternating: \(\omega(u,u) = 0\) for all \(u \in V\);</li>
+            <li>Non-degenerate: \(\omega(u,v) = 0\) for all \(v \in V\) implies that \(u=0\).</li>
+        </ol>
+        <p>
+            A <i>symplectic vector space</i> is a vector space equipped with a symplectic bilinear form. Also, by fixing a basis, 
+            it's possible to represent the symplectic bilinear form \(\omega\) by a matrix \(\Omega\).
+        </p>
+
+        <p>
+            The <i>symplectic group</i>, denoted \(\mathrm{Sp}(2n, K)\), is the group of linear transformations of a symplectic \(K\)-vector space 
+            of dimension \(2n\) preserving the symplectic bilinear form. In our case, we are interested in the group 
+            \[\mathrm{Sp}(4, \mathbb{R}) = \{M \in M_{4}(\mathbb{R}) \mid M^{T}\Omega M = \Omega\},\] 
+            and more precisely by the <i>projective symplectic group</i>
+            \[\mathrm{PSp}(4,\mathbb{R}) = \mathrm{Sp}(4,\mathbb{R})/\{-I,I\}.\]
+            It is a group of \(10\) dimensions. 
+        </p>
+
+        <p>
+            Let's consider the group of Möbius transformations \(\mathcal{Möb}\) as a subgroup of \(\mathrm{PGL}(4,\mathbb{R})\). This group 
+            is a subgroup of \(\mathrm{PSp}(4, \mathbb{R})\) of \(6\) dimensions. By parameterizing the \(4\) other dimensions with sliders, we obtain 
+            the entirety of \(\mathrm{PSp}(4, \mathbb{R})\). The Möbius transformations are selected the same way that is described in their <a href="mobius.html">dedicated section</a>. 
+        </p>
+
+        <p>
+            On the left, we visualise the action of \(\mathrm{PSp}(4, \mathbb{R})\) on isotropic flags (visualised as oriented circles with a point), and on the right, on the Veronese curve. 
+        </p>
+
+        <div class="picture_box">
+            <a href="visualisation/isotropicflags.html"><img src="images/picture_flags.png"></a>
+            <a href="visualisation/veronese.html"><img src="images/picture_veronese.png"></a>
+        </div>
+    </body>
+</html>

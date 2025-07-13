@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Accueil</title>
+        <link rel="icon" href="images/riemann_sphere">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Visualise des transformations sur la sphère de Riemann.">
+        <meta name="keywords" content="mathematiques, geometrie, visualisation, mobius, symplectique, groupe, veronese, lagrangien">
+        <link rel="stylesheet" href="home.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: "\\begin{align}", right: "\\end{align}", display: true},
+                    {left: "\\begin{align*}", right: "\\end{align*}", display: true}
+                ],
+                throwOnError : false
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <header><a href="index.html"><input type="button" value="English"></a></header>
+        <h1>Sphère de Riemann</h1>
+        
+        <p>
+            Ce site permet de voir l'action des transformations de Möbius ou l'action de \(\mathrm{PSp}(4, \mathbb{R})\) 
+            sur des cercles, des points, etc. sur la sphère de Riemann. Les méthodes pour calculer ces transformations sont décrites dans les sections 
+            correspondantes et en détail dans [Leb23]. Le projet est basé sur les idées développées dans [BK21].
+        </p>
+
+        <p id="main_links">
+        <a href="mobius-fr.html">\(\mathcal{Möb}\)</a><span id="sep"> | </span><a href="psp4r-fr.html">\(\mathrm{PSp}(4, \mathbb{R})\)</a>
+        </p>
+
+        <p>
+            Ce site a été créé par Samuel Leblanc, sous la supervision de <a href="https://jpburelle.espaceweb.usherbrooke.ca/index.html" target="_blank">Jean-Philippe Burelle</a>, 
+            dans le cadre du cours <i>Laboratoire de mathématiques expérimentales</i> à l'Université de Sherbrooke. 
+            Le code relatif à ce site se trouve sur <a href="https://github.com/samueleblanc" target="_blank">GitHub</a>. Les visualisations 
+            ont été faites avec <a href="https://cindyjs.org/" target="_blank">CindyJS</a>. 
+        </p>
+
+        <p>
+            [BK21] Jean-Philippe Burelle et Ryan Kirk. <a href="https://arxiv.org/abs/2108.08680" target="_blank">Piecewise circular curves and positivity</a>. 
+            arXiv:2108.08680, 2021.<br>
+            [Leb23] Samuel Leblanc. <a href="PDF/transformations_cercles_orientes.pdf" target="_blank">Transformations de cercles orientés tangents sur la sphère de Riemann</a> (PDF). 2023.
+        </p>
+    </body>
+</html>

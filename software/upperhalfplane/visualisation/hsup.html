@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>ℍₛᵤₚ</title>
+        <link rel="icon" href="../images/poincaredisk.svg">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="mathematic, geometry, visualisation, mobius, linear, group, hyperbolic">
+        <link rel="stylesheet" href="./visualisation.css">
+
+        <script type="text/javascript" src="https://cindyjs.org/dist/v0.8/Cindy.js"></script>
+        <script type="text/javascript" src="https://cindyjs.org/dist/v0.8/CindyGL.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script>
+    </head>
+    <body>
+        <header><a href="../index.html"><input type="button" value="Home"></a> <a href="hsup_fr.html"><input type="button" value="Français"></a></header>
+        <h1>\(\mathbb{H}_{\textrm{sup}}\)</h1>
+
+        <div class="settingBlock">
+            <form id="points_form" autocomplete="off">
+                <h4>\(\mathfrak{R}(z)\)</h4>
+                <label for="x_min">Min:</label>
+                <input type="number" name="x_min" id="x_min" value="-5"><br>
+                <label for="x_max">Max:</label>
+                <input type="number" name="x_max" id="x_max" value="5"><br><br>
+                <label for="btninfty">Send a point to \(\infty\)</label><input type="checkbox" name="btninfty" id="btninfty" unchecked><br>
+                <label for="removept">Remove a point</label><input type="checkbox" name="removept" id="removept" unchecked><br><br>
+                <input type="button" value="Show" id="show">
+                <input type="button" value="Reset" id="reset">
+            </form>
+        </div>
+
+        <div id="canvasContainer">
+            <p id="imzText">\(\mathfrak{I}(z)\)</p>
+            <p id="rezText">\(\mathfrak{R}(z)\)</p>
+            <canvas id="CSCanvas" width="650" height="650"></canvas>
+        </div>
+        <br><br><br><br>
+
+        <script id="csinit" type="text/x-cindyscript">
+            storedM = [[1,0],[0,1]];  // Matrix of the (total) transformation
+            transfoM = [[1,0],[0,1]];  // Matrix of the (current) transformation
+            
+            applyMob = false;  // True if currently applying a transformation
+            draggingZ1 = false;  // True if currently dragging a point
+            draggingZ2 = false;
+
+            dstToPoint = 0.15;  // Default value of the distance (mouse to point) at which it should be dragged
+
+            // Default values of the domain
+            reRange = -5..5;
+            
+            updateMatrix(start,current) := (
+                // Returns the new 'transfoM'
+
+                regional(fixed1, fixed2, fix1p0, fix1p1, fix2p0, fix2p1, A, B, T1, T2, reStart, imStart, reCurrent, imCurrent, theta1, theta2);
+                if (Z1.homog_2 == 0,
+                    fixed1 = [complex(Z1), 1];
+                    fixed2 = if (Z2.homog_3 == 0, [complex([1,0]),0], [complex(Z2), 1]);
+
+                    reStart = [re(start_1),1];
+                    reCurrent = [re(current_1),1];
+
+                    fix1p0 = fixed1_1;
+                    fix1p1 = fixed1_2;
+                    fix2p0 = fixed2_1;
+                    fix2p1 = fixed2_2;
+
+                    A = [[fix1p1*det([reStart,fixed2]), -fix1p0*det([reStart,fixed2])], 
+                        [fix2p1*det([reStart,fixed1]), -fix2p0*det([reStart,fixed1])]];
+
+                    B = [[fix1p1*det([reCurrent,fixed2]), -fix1p0*det([reCurrent,fixed2])], 
+                        [fix2p1*det([reCurrent,fixed1]), -fix2p0*det([reCurrent,fixed1])]];
+                    
+                    BinvA = mult(inverse(B),A);
+                    (1/sqrt(det(BinvA)))*BinvA;
+                    ,
+                    if (Z2.homog_2 == 0,
+                        fixed1 = complex(Z2);
+                        reStart = re(start_1);
+                        imStart = im(start_1);
+                        reCurrent = re(current_1);
+                        imCurrent = im(current_1);
+                        if (Z2.homog_3 == 0,
+                            A = (1/sqrt(imStart))*[[1,-reStart],[0,imStart]];
+                            B = (1/sqrt(imCurrent))*[[1,-reCurrent],[0,imCurrent]];
+                            ,
+                            T1 = (1/((reStart-fixed1)^2 + (imStart)^2))*[fixed1-reStart, imStart];
+                            T2 = (1/((reCurrent-fixed1)^2 + imCurrent^2))*[fixed1-reCurrent, imCurrent];
+                            A = mult((1/sqrt(T1_2))*[[1,-T1_1],[0,T1_2]],[[0,-1],[1,-fixed1]]);
+                            B = mult((1/sqrt(T2_2))*[[1,-T2_1],[0,T2_2]],[[0,-1],[1,-fixed1]]);
+                        );
+                        mult(inverse(B),A);
+                        ,
+                        fixed1 = complex(Z2);
+                        reStart = re(start_1);
+                        reCurrent = re(current_1);
+                        T1 = (reStart-re(fixed1))/im(fixed1);
+                        T2 = (reCurrent-re(fixed1))/im(fixed1);
+                        theta1 = arctan(reStart);
+                        theta2 = arctan(reCurrent);
+
+                        A = mult([[cos(theta1), -sin(theta1)],[sin(theta1), cos(theta1)]],(1/sqrt(im(fixed1)))*[[1,-re(fixed1)],[0,im(fixed1)]]);
+                        B = mult([[cos(theta2), -sin(theta2)],[sin(theta2), cos(theta2)]],(1/sqrt(im(fixed1)))*[[1,-re(fixed1)],[0,im(fixed1)]]);
+
+                        mult(inverse(B),A);
+                    );
+                );
+            );
+
+            C2x2toR4x4(m) := (
+                // Takes a 2x2 complex matrix and returns a 4x4 real matrix
+                [[re(m_1_1), -im(m_1_1), re(m_1_2), -im(m_1_2)],
+                 [im(m_1_1), re(m_1_1), im(m_1_2), re(m_1_2)],
+                 [re(m_2_1), -im(m_2_1), re(m_2_2), -im(m_2_2)],
+                 [im(m_2_1), re(m_2_1), im(m_2_2), re(m_2_2)]];
+            );
+
+            isInvertible(A) := (
+                det(A) != 0;
+            );
+
+            normLag(lag) := (
+                // Returns a lagrangian of the form 
+                // [[a, -b+c],
+                //  [b+c, a],
+                //  [1, 0],
+                //  [0, 1]]
+
+                if(isInvertible([lag_3, lag_4]),
+                    mult(lag, inverse([lag_3, lag_4]));
+                ,
+                    lag;
+                );
+            );
+
+            getCenter(lag) := (
+                // Returns [a, b] where a,b are the parameters in the lagrangian defined above
+                [lag_1_1, -(lag_1_2 - lag_2_1)/2];
+            );
+
+            getRadius(lag) := (
+                // Returns c where c is the parameter in the lagrangian defined above
+                (lag_1_2 + lag_2_1)/2;
+            );
+
+            updateDstToPoint(rangeMax) := (
+                // Called by JavaScript to make sure the 'effective range' (for mouse drag)
+                // of the points are adequate (based on the domain)
+
+                dstToPoint = 0.015 * rangeMax;
+            );
+
+            updateRanges(re, im) := (
+                // Called by JavaScript
+                reRange = re;
+            );
+
+            buildFlag(c, r) := (
+                // Returns a lagrangian representing a circle of center c and radius r
+                [[re(c), -im(c)+r],
+                 [im(c)+r, re(c)],
+                 [1,0],
+                 [0,1]];
+            );
+        </script>
+
+        <script id="csmousedrag" type="text/x-cindyscript">
+            // Move points
+            mousePos = mouse();
+            if ((|mousePos-Z1| < dstToPoint) & !applyMob & !draggingZ2,
+                draggingZ1 = true;
+            );
+            if ((|mousePos-Z2| < dstToPoint) & !applyMob & !draggingZ1,
+                draggingZ2 = true;
+            );
+            if (draggingZ1,
+                moveto(Z1,[mousePos_1,0]);
+            );
+            if (draggingZ2,
+                if (Z1.homog_2*Z1.homog_3 < 0,
+                    moveto(Z2,[mousePos_1,max(0,mousePos_2)]);
+                    ,
+                    moveto(Z2,[mousePos_1,0]);
+                );
+            );
+
+            // Update transfoM and the starting point
+            if (applyMob,
+                if (!draggingZ1 & !draggingZ2 & mousePos_2 >= 0,
+                    transfoM = updateMatrix(start,[complex(mousePos),1]);
+                    ,
+                    applyMob = false;
+                );
+                ,
+                if (!draggingZ1 & !draggingZ2,
+                    start = [complex(mousePos),1];
+                    applyMob = true;
+                );
+            );
+        </script>
+
+        <script id="csmouseup" type="text/x-cindyscript">
+            // Update storedM and assign other variables to their default value
+
+            storedM = mult(transfoM, storedM);
+            transfoM = [[1,0],[0,1]];
+            applyMob = false;
+            draggingZ1 = false;
+            draggingZ2 = false;
+        </script>
+
+        <script id="csdraw" type="text/x-cindyscript">
+            // Compute the element 'transfo' of Sp(4,R), apply the transformation and draw the circles
+
+            lenDomain = reRange_(-1)-reRange_1;
+            upperHalf = polygon([[reRange_(1),-0.1],[reRange_(-1),-0.1],[reRange_(-1),lenDomain],[reRange_1,lenDomain]]);
+            clip(upperHalf);
+            transfo = C2x2toR4x4(mult(transfoM, storedM));
+
+            forall(reRange,x,
+                if(mod(x,2)==0,
+                    z = [x,0];
+                    fz = mult(transfo, buildFlag(complex(z),1));
+                    normFz = normLag(fz);
+                    c = getCenter(normFz);
+                    r = getRadius(normFz);
+                    drawcircle(c, |r|,
+                            color->hue((x-reRange_1)/lenDomain),
+                            size->3);
+                );
+                if(mod(x,3)==0,
+                    z = [x,0];
+                    fz = mult(transfo, buildFlag(complex(z),2));
+                    normFz = normLag(fz);
+                    c = getCenter(normFz);
+                    r = getRadius(normFz);
+                    drawcircle(c, |r|,
+                            color->hue((x-reRange_1)/lenDomain),
+                            size->3);
+                );
+                if(mod(x,4)==0,
+                    z = [x+10000,0];
+                    fz = mult(transfo, buildFlag(complex(z),10000));
+                    normFz = normLag(fz);
+                    c = getCenter(normFz);
+                    r = getRadius(normFz);
+                    drawcircle(c, |r|,
+                            color->[0,0,0],
+                            size->3);
+                );
+                if(mod(x,8)==0,
+                    z = [x,0];
+                    fz = mult(transfo, buildFlag(complex(z),5));
+                    normFz = normLag(fz);
+                    c = getCenter(normFz);
+                    r = getRadius(normFz);
+                    drawcircle(c, |r|,
+                            color->hue((x-reRange_1)/lenDomain),
+                            size->3);
+                );
+            );
+        </script>
+
+        <script type="text/javascript">
+            function float(array) {
+                return array.map(i => parseFloat(i));
+            }
+        </script>
+
+        <script type="text/javascript">
+            // Adjust canvas width
+            const canvasContainer = document.getElementById("canvasContainer");
+            const canvas = document.getElementById("CSCanvas");
+            let size = Math.min(canvasContainer.clientWidth - 115, window.innerHeight * 0.8);
+            canvas.width = size;
+            canvas.height = size;
+        </script>
+        
+        <script type="text/javascript">
+            const showBtn = document.getElementById("show");
+            const resetBtn = document.getElementById("reset");
+            const inftyBtn = document.getElementById("btninfty");
+            const removePt = document.getElementById("removept");
+
+            // Domain
+            const reMin = document.getElementById("x_min");
+            const reMax = document.getElementById("x_max");
+            const imMax = document.getElementById("y_max");
+
+            let reMinV, imMaxV, reMaxV, imMinV;
+            imMinV = 0;
+            [reMinV, imMaxV, reMaxV, imMinV] = float([reMin.value, reMax.value-reMin.value-3, reMax.value, imMinV]);
+
+            // Homogeneous coordinates
+            let z1Pos = [((reMaxV+reMinV)/2) + (reMinV/2), 0, 1];
+            let z2Pos = [((reMaxV+reMinV)/2) + (reMaxV/2), 0, 1];
+
+            let lastZ1Pos = z1Pos;  // Keeps track of Z1's position when clicking the btn to remove Z1 or to bring it back
+            let lastZ2Pos = z2Pos;  // Keeps track of Z2's position when clicking the btn to send Z2 to infinity or to bring it back
+
+            // Canvas info
+            let cdy = CindyJS({
+                    canvasname: "CSCanvas",
+                    scripts: "cs*",
+                    animation: {autoplay: false},
+                    geometry : [
+                        {name: "Z1", kind: "P", type: "Free", pos: z1Pos, color: [1,1,1], size: 5, pinned: true},
+                        {name: "Z2", kind: "P", type: "Free", pos: z2Pos, color: [1,1,1], size: 5, pinned: true},
+                        {name: "re_axis", type: "FreeLine", pos: [0,1,0], color: [0,0,0], pinned: true},
+                        {name: "im_axis", type: "FreeLine", pos: [1,0,0], color: [0,0,0], pinned: true}
+                    ],
+                    grid: 1,
+                    ports: [{
+                        id: "CSCanvas",
+                        transform: [{visibleRect: [reMinV, imMaxV, reMaxV, imMinV]}]
+                    }],
+                    use: ["CindyGL"]
+                });
+
+            if (removePt.checked) {z1Pos = [0,-1,1]}
+            if (inftyBtn.checked) {z2Pos = [1,0,0]}
+            
+            showBtn.addEventListener("click", () => {
+                // Call CindyJS again but with the (potentially) new parameters
+                [reMinV, imMaxV, reMaxV, imMinV] = float([reMin.value, reMax.value-reMin.value-3, reMax.value, imMinV]);
+                if (removePt.checked) {
+                    z1Pos = [0,-1,1];
+                } else {
+                    z1Pos = [((reMaxV+reMinV)/2) + (reMaxV/2), imMinV, 1];
+                }; 
+                if (inftyBtn.checked) {
+                    z2Pos = [1,0,0];
+                } else {
+                    z2Pos = [((reMaxV+reMinV)/2) + (reMinV/2), imMinV, 1];
+                };
+                makeCanvas();
+                updateDstToPoint();
+                updateRanges();
+                verifyDomain();
+            });
+
+            resetBtn.addEventListener("click", () => {
+                // Reset everything to their default value
+                inftyBtn.checked = false;
+                removePt.checked = false;
+                reMin.value = -5;
+                reMax.value = 5;
+                [reMinV, imMaxV, reMaxV, imMinV] = float([reMin.value, reMax.value-reMin.value-3, reMax.value, imMinV]);
+                z1Pos = [((reMaxV+reMinV)/2) + (reMinV/2), imMinV, 1];
+                z2Pos = [((reMaxV+reMinV)/2) + (reMaxV/2), imMinV, 1];
+                makeCanvas();
+                updateDstToPoint();
+                updateRanges();
+                verifyDomain();
+            });
+
+            inftyBtn.addEventListener("click", () => {
+                // Send Z2 to infinity or bring it back
+                if (inftyBtn.checked) {
+                    lastZ2Pos = getZ2();
+                    z2Pos = [1,0,0];
+                    updateZ2(z2Pos);
+                } else {
+                    if (lastZ2Pos[1]*lastZ2Pos[2] > 0 && !removePt.checked) {
+                        z2Pos = [lastZ2Pos[0]/lastZ2Pos[2], 0, 1];
+                    } else {
+                        z2Pos = lastZ2Pos;
+                    };
+                    updateZ2(z2Pos);
+                };
+            });
+
+            removePt.addEventListener("click", () => {
+                if (removePt.checked) {
+                    lastZ1Pos = getZ1();
+                    z1Pos = [0,-1,1];
+                    updateZ1(z1Pos);
+                } else {
+                    let z2Current = getZ2();
+                    if (z2Current[1]*z2Current[2] > 0) {
+                        z2Pos = [z2Current[0]/z2Current[2], 0, 1];
+                        updateZ2(z2Pos);
+                    };
+                    z1Pos = lastZ1Pos;
+                    updateZ1(z1Pos);
+                };
+            });
+
+            function makeCanvas() {
+                cdy = CindyJS({
+                    canvasname: "CSCanvas",
+                    scripts: "cs*",
+                    animation: {autoplay: false},
+                    geometry : [
+                        {name: "Z1", kind: "P", type: "Free", pos: z1Pos, color: [1,1,1], size: 5, pinned: true},
+                        {name: "Z2", kind: "P", type: "Free", pos: z2Pos, color: [1,1,1], size: 5, pinned: true},
+                        {name: "re_axis", type: "FreeLine", pos: [0,1,0], color: [0,0,0], pinned: true},
+                        {name: "im_axis", type: "FreeLine", pos: [1,0,0], color: [0,0,0], pinned: true}
+                    ],
+                    grid: 1,
+                    ports: [{
+                        id: "CSCanvas",
+                        transform: [{visibleRect: [reMinV, imMaxV, reMaxV, imMinV]}]
+                    }],
+                    use: ["CindyGL"]
+                });
+            };
+
+            function updateZ1(Z1) {
+                // Changes the position of Z1
+                cdy.evokeCS('moveto(Z1,['+Z1.join(",")+']);');
+            };
+
+            function updateZ2(Z2) {
+                // Changes the position of Z2
+                cdy.evokeCS('moveto(Z2,['+Z2.join(",")+']);');
+            };
+
+            function getZ1() {
+                // Returns the position of Z1
+                return cdy.saveState().geometry[0].pos;
+            };
+
+            function getZ2() {
+                // Returns the position of Z2
+                return cdy.saveState().geometry[1].pos;
+            };
+
+            function updateDstToPoint() {
+                // Updates the value of 'dstToPoint' (variable in the CindyJS code)
+                cdy.evokeCS('updateDstToPoint('+Math.max((reMaxV-reMinV), (imMaxV-imMinV))+');');
+            };
+
+            function updateRanges() {
+                // Updates the domain in CindyJS
+                cdy.evokeCS('updateRanges('+reMinV+'..'+reMaxV+','+imMinV+'..'+imMaxV+');');
+            };
+
+            function verifyDomain() {
+                if (reMaxV < reMinV) {
+                    alert("Error: ℜₘₐₓ(𝑧) < ℜₘᵢₙ(𝑧)");
+                } else if (imMaxV <= 0) {
+                    alert("Error: ℑₘₐₓ(𝑧) < 0");
+                };
+            };
+
+            updateDstToPoint();
+            updateRanges();
+            verifyDomain();
+
+        </script>
+    </body>
+</html>
