@@ -5,6 +5,7 @@ body {
 header {
     margin-bottom: 2em;
     text-align: center;
+    position: relative;
 }
 .nav-bar {
     display: flex;
@@ -20,20 +21,19 @@ header {
     transition: background-color 0.2s ease;
 }
 .dropdown-main-button {
-    position: relative;
     display: inline-block;
     align-items: center;
     text-align: center;
     justify-content: center;
-    font-size: 3em;
+    font-size: 2.2em;
     text-decoration: none;
     border: none;
     padding: 0em 0.4em 0.3em 0.4em;
 }
 #dropdown {
     position: absolute;
-    top: 9%;
-    right: 5%;
+    top: 100%;
+    right: 0%;
     border-radius: 1em;
     justify-content: center;
     line-height: 1.4em;
@@ -247,9 +247,6 @@ footer {
         width: 14%;
         opacity: 100%;
     }
-    .regular {
-        display: none;
-    }
 }
 
 @media (min-width: 551px) and (max-width: 1000px) {
@@ -284,9 +281,6 @@ footer {
         width: 6%;
         opacity: 100%;
     }
-    .cellphone {
-        display: none;
-    }
 }
 @media (min-width: 1001px) and (max-width: 1280px) {
     body {
@@ -298,9 +292,6 @@ footer {
     p, ol, ul {
         text-align: justify;
         font-size: 1.2em;
-    }
-    .cellphone {
-        display: none;
     }
 }
 @media (min-width: 730px) and (max-width: 789px) {
@@ -321,7 +312,12 @@ footer {
         padding: 1em 1em;
     }
 }
-@media (min-width: 1281px) {
+@media (max-width: 799px) {
+    .regular {
+        display: none;
+    }
+}
+@media (min-width: 800px) {
     .cellphone {
         display: none;
     }
