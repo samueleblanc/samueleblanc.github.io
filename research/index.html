@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>Research</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="../js/cell-dropdown.js" defer></script>
         <link rel="stylesheet" href="../css/style.css">
         <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon_io/apple-touch-icon.png" media="(prefers-color-scheme: light)">
         <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon_io/favicon-32x32.png" media="(prefers-color-scheme: light)">
@@ -23,15 +24,30 @@
     </head>
     <body>
         <header>
-            <nav class="nav-bar">
-              <a href="../index.html" class="nav-button">Samuel Leblanc</a>
-              <a class="nav-button">Research</a>
-              <a href="../talks/index.html" class="nav-button">Talks</a>
-              <a href="../teaching/index.html" class="nav-button">Teaching</a>
-              <a href="../pdf/CV_english.pdf" target="_blank" class="nav-button">CV</a>
-              <a href="../software/index.html" class="nav-button">Software</a>
-              <a href="./fr/index.html" class="nav-button">Français</a>
-            </nav>
+            <div class="regular">
+                <nav class="nav-bar">
+                    <a href="../index.html" class="nav-button">Samuel Leblanc</a>
+                    <a class="nav-button">Research</a>
+                    <a href="../talks/index.html" class="nav-button">Talks</a>
+                    <a href="../teaching/index.html" class="nav-button">Teaching</a>
+                    <a href="../pdf/CV_english.pdf" target="_blank" class="nav-button">CV</a>
+                    <a href="../software/index.html" class="nav-button">Software</a>
+                    <a href="./fr/index.html" class="nav-button">Français</a>
+                </nav>
+            </div>
+            <div class="cellphone">
+                <nav class="nav-bar-cell">
+                    <a href="../index.html" class="nav-button">Samuel Leblanc</a>
+                    <button id="dropbtn" class="dropdown-main-button">☰</button>
+                    <div id="dropdown">
+                        <a href="../talks/index.html" class="dropdown-button">Talks</a><br>
+                        <a href="../teaching/index.html" class="dropdown-button">Teaching</a><br>
+                        <a href="../pdf/CV_english.pdf" target="_blank" class="dropdown-button">CV</a><br>
+                        <a href="../software/index.html" class="dropdown-button">Software</a><br>
+                        <a href="./fr/index.html" class="dropdown-button">Français</a>
+                    </div>
+                </nav>
+            </div>
           </header>
 
         <div class="research_content">

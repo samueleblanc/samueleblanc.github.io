@@ -19,6 +19,49 @@ header {
     border-radius: 4px;
     transition: background-color 0.2s ease;
 }
+.dropdown-main-button {
+    position: relative;
+    display: inline-block;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    font-size: 3em;
+    text-decoration: none;
+    border: none;
+    padding: 0em 0.4em 0.3em 0.4em;
+}
+#dropdown {
+    position: absolute;
+    top: 9%;
+    right: 5%;
+    border-radius: 1em;
+    justify-content: center;
+    line-height: 1.4em;
+    padding: 2em;
+    opacity: 0;
+    transform: translateY(-30px);
+    pointer-events: none;
+    transition: opacity 0.08s ease, transform 0.22s ease;
+}
+#dropdown.open {
+    opacity: 1;
+    transform: translateY(0px);
+    pointer-events: auto;
+}
+.dropdown-button {
+    display: block;
+    font-size: 1.2em;
+    text-decoration: none;
+    border-radius: 4px;
+}
+.nav-bar-cell {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 0.6em;
+}
+
 
 h1 {
     text-align: center;
@@ -36,6 +79,7 @@ p, h1, ol, ul {
 p, ol, ul {
     text-align: justify;
     font-size: 1.3em;
+    line-height: 1.2em;
 }
 p, a, i, ol, ul {
     font-family: 'Lato', sans-serif;
@@ -106,6 +150,22 @@ footer {
         background-color: lightgray;
         color: black;
     }
+    #dropdown.open {
+        background-color: white;
+    }
+    .dropdown-main-button {
+        background-color: white;
+        color: black;
+    }
+    .dropdown-main-button:hover {
+        color: rgb(48, 48, 48);
+    }
+    .dropdown-button {
+        color: black;
+    }
+    .dropdown-button:hover {
+        color: rgb(48, 48, 48);
+    }
     .dark {
         display: none;
     }
@@ -133,6 +193,22 @@ footer {
     .nav-button:hover {
         background-color: #333;
         color: #e0e0e0;
+    }
+    #dropdown.open {
+        background-color: #181818;
+    }
+    .dropdown-main-button {
+        background-color: #181818;
+        color: #e0e0e0;
+    }
+    .dropdown-main-button:hover {
+        color: white;
+    }
+    .dropdown-button {
+        color: #e0e0e0;
+    }
+    .dropdown-button:hover {
+        color: white;
     }
     .light {
         display: none;
@@ -171,6 +247,9 @@ footer {
         width: 14%;
         opacity: 100%;
     }
+    .regular {
+        display: none;
+    }
 }
 
 @media (min-width: 551px) and (max-width: 1000px) {
@@ -205,6 +284,9 @@ footer {
         width: 6%;
         opacity: 100%;
     }
+    .cellphone {
+        display: none;
+    }
 }
 @media (min-width: 1001px) and (max-width: 1280px) {
     body {
@@ -216,6 +298,9 @@ footer {
     p, ol, ul {
         text-align: justify;
         font-size: 1.2em;
+    }
+    .cellphone {
+        display: none;
     }
 }
 @media (min-width: 730px) and (max-width: 789px) {
@@ -234,5 +319,10 @@ footer {
 @media (min-width: 921px) and (max-width: 1024px) {
     .nav-button {
         padding: 1em 1em;
+    }
+}
+@media (min-width: 1281px) {
+    .cellphone {
+        display: none;
     }
 }

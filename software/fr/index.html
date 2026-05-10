@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>Logiciels</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="../../js/cell-dropdown.js" defer></script>
         <link rel="stylesheet" href="../../css/style.css">
         <link rel="apple-touch-icon" sizes="180x180" href="../../images/favicon_io/apple-touch-icon.png" media="(prefers-color-scheme: light)">
         <link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon_io/favicon-32x32.png" media="(prefers-color-scheme: light)">
@@ -22,17 +23,32 @@
         <meta property="og:image" content="https://samueleblanc.com/images/a2a412f8-c7c8-4e42-99d0-f9ee757bb5b1~1.jpg">
     </head>
     <body>
-        <header>
-            <nav class="nav-bar">
-                <a href="../../fr/index.html" class="nav-button">Samuel Leblanc</a>
-                <a href="../../research/fr/index.html" class="nav-button">Recherche</a>
-                <a href="../../talks/fr/index.html" class="nav-button">Conférences</a>
-                <a href="../../teaching/fr/index.html" class="nav-button">Enseignement</a>
-                <a href="../../pdf/CV_francais.pdf" target="_blank" class="nav-button">CV</a>
-                <a class="nav-button">Logiciels</a>
-                <a href="../index.html" class="nav-button">English</a>
-            </nav>
-          </header>
+          <header>
+            <div class="regular">
+                <nav class="nav-bar">
+                    <a href="../../fr/index.html" class="nav-button">Samuel Leblanc</a>
+                    <a href="../../research/fr/index.html" class="nav-button">Recherche</a>
+                    <a href="../../talks/fr/index.html" class="nav-button">Conférences</a>
+                    <a href="../../teaching/fr/index.html" class="nav-button">Enseignement</a>
+                    <a href="../../pdf/CV_francais.pdf" target="_blank" class="nav-button">CV</a>
+                    <a class="nav-button">Logiciels</a>
+                    <a href="../index.html" class="nav-button">English</a>
+                </nav>
+            </div>
+            <div class="cellphone">
+                <nav class="nav-bar-cell">
+                    <a href="../../fr/index.html" class="nav-button">Samuel Leblanc</a>
+                    <button id="dropbtn" class="dropdown-main-button">☰</button>
+                    <div id="dropdown">
+                        <a href="../../research/fr/index.html" class="dropdown-button">Recherche</a><br>
+                        <a href="../../talks/fr/index.html" class="dropdown-button">Conférences</a><br>
+                        <a href="../../teaching/fr/index.html" class="dropdown-button">Enseignement</a><br>
+                        <a href="../../pdf/CV_francais.pdf" target="_blank" class="dropdown-button">CV</a><br>
+                        <a href="../index.html" class="dropdown-button">English</a>
+                    </div>
+                </nav>
+            </div>
+        </header>
 
           <div class="software_content">
             <h1>Logiciels</h1>
