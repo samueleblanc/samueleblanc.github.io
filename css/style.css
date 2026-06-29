@@ -73,15 +73,17 @@ h1 a {
 h4 {
     font-family: 'Merriweather', serif;
 }
-p, h1, ol, ul {
+p, h1, ol, ul, small {
     margin: 2% 10%;
 }
-p, ol, ul {
+p, ol, ul, small {
     text-align: justify;
+}
+p, ol, ul {
     font-size: 1.3em;
     line-height: 1.2em;
 }
-p, a, i, ol, ul {
+p, a, i, ol, ul, small {
     font-family: 'Lato', sans-serif;
 }
 .email {
@@ -130,7 +132,7 @@ footer {
     body {
         background-color: white;
     }
-    h1, p, i, ol, ul, h4, .email {
+    h1, p, i, ol, ul, h4, .email, small {
         color: black;
     }
     .email:hover {
@@ -174,7 +176,7 @@ footer {
     body {
         background-color: #181818;
     }
-    h1, p, i, ol, ul, h4, .email {
+    h1, p, i, ol, ul, h4, .email, small {
         color: #e0e0e0;
     }
     .email:hover {
