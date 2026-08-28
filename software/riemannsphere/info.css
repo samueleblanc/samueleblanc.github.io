@@ -7,11 +7,9 @@ header {
 }
 h1 {
     text-align: center;
-    color: black;
 }
 h1 a {
     text-decoration: none;
-    color: black;
 }
 p, ol {
     margin: 2% 10%;
@@ -22,11 +20,7 @@ p {
 input[type=button] {
     border: none;
     border-radius: 7px;
-    background-color: whitesmoke;
     padding: 12px;
-}
-input[type=button]:hover {
-    background-color: lightgray;
 }
 /* Picture as link to other page */
 .picture_box {
@@ -42,4 +36,53 @@ input[type=button]:hover {
 }
 .picture_box img:hover {
     opacity: 100%;
+}
+
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: white;
+    }
+    h1, h2, p, i, ol, ul, h4, small {
+        color: black;
+    }
+    a {
+        color: #1a0dab;
+    }
+    a:hover {
+        color: #0d0080;
+    }
+    h1 a {
+        color: black;
+    }
+    input[type=button] {
+        color: black;
+        background-color: whitesmoke;
+    }
+    input[type=button]:hover {
+        background-color: lightgray;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #181818;
+    }
+    h1, h2, p, i, ol, ul, h4, small {
+        color: #e0e0e0;
+    }
+    a {
+        color: #8ab4f8;
+    }
+    a:hover {
+        color: #a2c0ff;
+    }
+    h1 a {
+        color: #e0e0e0;
+    }
+    input[type=button] {
+        color: #e0e0e0;
+        background-color: #303030;
+    }
+    input[type=button]:hover {
+        background-color: #404040;
+    }
 }

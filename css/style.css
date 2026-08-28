@@ -63,7 +63,7 @@ header {
 }
 
 
-h1 {
+h1, h2 {
     text-align: center;
     font-family: 'Merriweather', serif;
 }
@@ -132,7 +132,7 @@ footer {
     body {
         background-color: white;
     }
-    h1, p, i, ol, ul, h4, .email, small {
+    h1, h2, p, i, ol, ul, h4, .email, small {
         color: black;
     }
     .email:hover {
@@ -176,7 +176,7 @@ footer {
     body {
         background-color: #181818;
     }
-    h1, p, i, ol, ul, h4, .email, small {
+    h1, h2, p, i, ol, ul, h4, .email, small {
         color: #e0e0e0;
     }
     .email:hover {
