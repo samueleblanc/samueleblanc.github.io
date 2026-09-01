@@ -757,7 +757,7 @@ function QPEngine() {
       return result;
     }
 
-    report('Rewriting ' + potential.size + ' potential term' + (potential.size > 1 ? 's' : ''));
+    report('Rewriting ' + potential.size + ' potential term' + (potential.size != 1 ? 's' : ''));
     const bracketed = new Map();
     for (const { word, coeff } of potential.values()) { const bw = bracketWord(word); if (bw) potAdd(bracketed, bw, coeff); }
     const deltaW = new Map();
@@ -823,7 +823,7 @@ function QPEngine() {
         const MAX_SPLIT_ROUNDS = maxLen + 6;
         let round = 0;
         for (;;) {
-          report('Splitting ' + pairs.length + ' two-cycle pair' + (pairs.length > 1 ? 's' : '') + ', round ' + (round + 1));
+          report('Splitting ' + pairs.length + ' two-cycle pair' + (pairs.length != 1 ? 's' : '') + ', round ' + (round + 1));
           const { u, v } = splitByPriority(current, pairs, priorityOf, roleOf);
           const converged = pairs.every((_, idx) => u[idx].size === 0 && v[idx].size === 0);
           if (converged) break;
@@ -886,7 +886,7 @@ function QPEngine() {
       const back = dirCount.get(tgt + ',' + src);
       if (back) residual2Cycles += n * back;
     }
-    if (residual2Cycles > 0) warnings.push(`Resulting quiver still has ${residual2Cycles} two-cycle` + (residual2Cycles > 1 ? 's' : '') + ' (a pair of arrows i↔j survives with no way to cancel it) — the potential is degenerate.');
+    if (residual2Cycles > 0) warnings.push(`Resulting quiver still has ${residual2Cycles} two-cycle` + (residual2Cycles != 1 ? 's' : '') + ' (a pair of arrows i↔j survives with no way to cancel it) — the potential is degenerate.');
 
     const newQuiver = { vertices: quiver.vertices, arrows, nextVertexId: quiver.nextVertexId, nextArrowId: nextId };
     // Dedupe as a safety net — every message above is pushed from exactly
@@ -1135,7 +1135,7 @@ function loadPreset(name) {
   state.quiver = Q; state.potential = W; state.selection = null; state.termDraft = []; state.arrowDraftSource = null; state.highlightedTermKey = null;
   history = []; historyIndex = -1;
   snapshot('Preset: ' + (name || 'empty'));
-  if (badTerms.length) addMessage(`Discarded ${badTerms.length} malformed potential term` + (badTerms.length > 1 ? 's' : '') + ' from this preset (internal bug — please report).', 'warn');
+  if (badTerms.length) addMessage(`Discarded ${badTerms.length} malformed potential term` + (badTerms.length != 1 ? 's' : '') + ' from this preset (internal bug — please report).', 'warn');
   // The Markov triangle's lowest vertices would otherwise sit under the
   // bottom-left hint box, so pull it up above the canvas's vertical middle.
   fitView(name === 'markov' ? 0.4 : 0.5);
@@ -1217,8 +1217,8 @@ function deserializeState(text) {
   syncFieldUI();
   fitView();
   renderAll();
-  if (badEntries) addMessage(`Skipped ${badEntries} vertex/arrow entr${badEntries > 1 ? 'ies' : 'y'} with a bad id or missing endpoints.`, 'warn');
-  if (skipped) addMessage(`Skipped ${skipped} potential term` + (skipped > 1 ? 's' : '') + ` that weren't closed, composable cycles, or valid in this field.`, 'warn');
+  if (badEntries) addMessage(`Skipped ${badEntries} vertex/arrow entr${badEntries != 1 ? 'ies' : 'y'} with a bad id or missing endpoints.`, 'warn');
+  if (skipped) addMessage(`Skipped ${skipped} potential term` + (skipped != 1 ? 's' : '') + ` that weren't closed, composable cycles, or valid in this field.`, 'warn');
   if (fieldWarning) addMessage(fieldWarning, 'warn');
 }
 
@@ -2040,8 +2040,8 @@ function updateStructuralWarning(issues) {
     return;
   }
   const parts = [];
-  if (loopIds.size) parts.push(loopIds.size + ' loop' + (loopIds.size > 1 ? 's' : ''));
-  if (pairs) parts.push(pairs + ' two-cycle' + (pairs > 1 ? 's' : ''));
+  if (loopIds.size) parts.push(loopIds.size + ' loop' + (loopIds.size != 1 ? 's' : ''));
+  if (pairs) parts.push(pairs + ' two-cycle' + (pairs != 1 ? 's' : ''));
   // The two conditions are not the same rule and must not be stated as one:
   // a loop anywhere blocks mutation outright (mutateQP rejects it), while a
   // 2-cycle only matters at the vertex being mutated — one away from it is
@@ -2629,7 +2629,7 @@ function applyFieldSwitch(target) {
   snapshot('Switch field to ' + (target.kind === 'Q' ? 'Q' : ('F_' + target.p)));
   syncFieldUI();
   renderAll();
-  if (dropped) addMessage(`${dropped} potential term` + (dropped > 1 ? 's' : '') + ` dropped — their denominator wasn't invertible in the new field.`, 'warn');
+  if (dropped) addMessage(`${dropped} potential term` + (dropped != 1 ? 's' : '') + ` dropped — their denominator wasn't invertible in the new field.`, 'warn');
   else addMessage('Switched coefficient field.', 'ok');
 }
 
