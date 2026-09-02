@@ -368,6 +368,26 @@ function QPEngine() {
     // the untouched-term path below reuse a key instead of recomputing it.
     const out = new Map();
     const buf = [];
+    // Shortest replacement of each substituted arrow, computed once for the
+    // whole call rather than per term (a substitution set can hold thousands
+    // of paths, so rescanning it per position was itself significant). An
+    // arrow with no substitution stands for itself, so it counts 1; an arrow
+    // substituted by nothing counts 0, because such a term produces no words
+    // at all and that is not a length-cap drop.
+    const minLenCache = new Map();
+    const minLen = (id) => {
+      let m = minLenCache.get(id);
+      if (m !== undefined) return m;
+      const s = substitutions.get(id);
+      m = 1;
+      if (s) {
+        m = Infinity;
+        for (const x of s) if (x.path.length < m) m = x.path.length;
+        if (m === Infinity) m = 0;
+      }
+      minLenCache.set(id, m);
+      return m;
+    };
     const merge = (key, word, c) => {
       const existing = out.get(key);
       const nc = existing ? fadd(existing.coeff, c) : c;
@@ -388,12 +408,32 @@ function QPEngine() {
         continue;
       }
       const n = word.length;
+      // minRest[i] is the shortest the rest of the word can possibly become
+      // from position i onwards. A branch whose length already exceeds the
+      // cap once that minimum is added cannot finish under the cap, so it is
+      // never entered — which is the whole game in the splitting rounds,
+      // where phi(gamma) = gamma - v expands each occurrence into as many
+      // ways as v has paths and the vast majority of the resulting words are
+      // over-length. Without this, those words were built and then thrown
+      // away: on a real 8-vertex quiver at maxLen 16, 96% of the expansion
+      // was discarded and one substitution took 89 seconds.
+      const minRest = new Array(n + 1);
+      minRest[n] = 0;
+      for (let i = n - 1; i >= 0; i--) minRest[i] = minRest[i + 1] + minLen(word[i]);
       const walk = (i, len, c) => {
         if (len > maxLen) { if (truncated) truncated.value = true; return; }
         if (i === n) { potAdd(out, buf.slice(0, len), c); return; }
         const subs = substitutions.get(word[i]);
         if (!subs) { buf[len] = word[i]; walk(i + 1, len + 1, c); return; }
+        const room = maxLen - len - minRest[i + 1];
         for (const { path, coeff: pc } of subs) {
+          // Skipped rather than descended into: the words this branch would
+          // reach are exactly the over-length ones the walk used to build
+          // and drop, so the drop is still reported. The paths are visited
+          // in their original order (sorting them by length would prune a
+          // little harder, but it changes the order words are produced, and
+          // with it the order of the resulting potential).
+          if (path.length > room) { if (truncated) truncated.value = true; continue; }
           for (let j = 0; j < path.length; j++) buf[len + j] = path[j];
           walk(i + 1, len + path.length, fmul(c, pc));
         }
