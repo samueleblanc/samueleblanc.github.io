@@ -127,6 +127,12 @@ footer {
 .picture_box_footer img:hover {
     opacity: 100%;
 }
+li {
+  margin-bottom: 0.25em;
+}
+li:last-child {
+  margin-bottom: 0;
+}
 
 @media (prefers-color-scheme: light) {
     body {
